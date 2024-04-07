@@ -133,7 +133,6 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
       setIsFavorite(found);
     }
   };
-  console.log(nextFiveDays);
 
   return (
     <Container>
