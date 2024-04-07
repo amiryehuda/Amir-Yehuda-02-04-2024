@@ -1,21 +1,47 @@
 import axios from "axios";
 import { urls } from "./urls";
-//mock data
-import cityResponse from "../mock/tlvLocation.json";
-import nextFiveDaysResponse from "../mock/fiveDays.json";
 import { convertToCelsius, getShortDayName } from "./helpers";
 import { OneDayWeatherType } from "../store/weather/weatherSlice";
-import searchResponse from "../mock/searchReaponse.json";
+import { toast } from "react-toastify";
+
+export const getUserLatLan = async (): Promise<string> => {
+  try {
+    if (navigator.geolocation) {
+      const position = await new Promise<GeolocationPosition>(
+        (resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        }
+      );
+
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      return `${latitude},${longitude}`;
+    } else {
+      console.error("Geolocation is not supported by your browser");
+      toast.error("Geolocation is not supported by your browser");
+      throw new Error("Geolocation is not supported by your browser");
+    }
+  } catch (error) {
+    console.error("Error getting location:", error);
+    toast.error("Error getting location - Please check your location settings");
+    throw error;
+  }
+};
 
 export const getLocationKey = async (
   cityName: string
-): Promise<{ key: string; englishName: string } | null> => {
-  // const url = urls.getLocationKeyUrl(cityName);
+): Promise<{ Key: string; englishName: string } | null> => {
+  const url = urls.getLocationKeyUrl(cityName);
+  // const url = urls.getLocationKeyUrl("Tel Aviv");
 
   try {
-    // const response = await axios.get(url);
-    // return {key: response.data[0].key, englishName:response.data[0].EnglishName};
-    return { key: "215854", englishName: "TeL Aviv" };
+    const response = await axios.get(url);
+    return {
+      Key: response.data[0].Key,
+      englishName: response.data[0].EnglishName,
+    };
+    // return { key: "215854", englishName: "TeL Aviv" };
   } catch (error) {
     console.log("Error getLocationKey: ", error);
     return null;
@@ -35,23 +61,15 @@ export const getCityWeather = async (
   const url = urls.getCityWeatherUrl(locationKey);
 
   try {
-    // const response = await axios.get(url);
-    // return {
-    //   weatherText: response.data[0].WeatherText,
-    //   iconNumber: response.data[0].WeatherIcon,
-    //   fahrenheit: Math.floor( response.data[0].Temperature.Imperial.Value),
-    //   celsius: Math.floor(response.data[0].Temperature.Metric.Value) ,
-    // };
-    /////////////////////////////////
-    const response = cityResponse;
+    const response = await axios.get(url);
     return {
-      weatherText: response[0].WeatherText,
-      iconNumber: response[0].WeatherIcon,
-      fahrenheit: Math.floor(response[0].Temperature.Imperial.Value),
-      celsius: Math.floor(response[0].Temperature.Metric.Value),
+      weatherText: response.data[0].WeatherText,
+      iconNumber: response.data[0].WeatherIcon,
+      fahrenheit: Math.floor(response.data[0].Temperature.Imperial.Value),
+      celsius: Math.floor(response.data[0].Temperature.Metric.Value),
     };
   } catch (error) {
-    console.log("Error getLocationKey: ", error);
+    console.log("Error getCityWeather: ", error);
     return null;
   }
 };
@@ -62,9 +80,7 @@ export const getNextFiveDays = async (
   const url = urls.getFiveDaysWeatherUrl(parseInt(locationKey));
 
   try {
-    // const response: any = await axios.get(url);
-    // console.log(response);
-    const response = nextFiveDaysResponse.DailyForecasts;
+    const response: any = await axios.get(url);
     const parsedForecasts: {
       day: string;
       celsius: number;
@@ -72,8 +88,7 @@ export const getNextFiveDays = async (
     }[] = [];
 
     if (response) {
-      // response.data.DailyForecasts.map((forecast: any) => {
-      response.map((forecast: any) => {
+      response.data.DailyForecasts.map((forecast: any) => {
         const day = getShortDayName(forecast.Date);
         const fahrenheitMin = forecast.Temperature.Minimum.Value;
         const fahrenheitMax = forecast.Temperature.Maximum.Value;
@@ -88,26 +103,26 @@ export const getNextFiveDays = async (
           fahrenheit: fahrenheitAverage,
         });
       });
-      // console.log(parsedForecasts);
+
       return parsedForecasts;
     } else {
       return [];
     }
   } catch (error) {
-    console.log("Error getLocationKey: ", error);
+    console.log("Error getNextFiveDays: ", error);
     return [];
   }
 };
 
 interface CityInfo {
   name: string;
-  key: string;
+  Key: string;
 }
 
 const extractCities = (response: any[]): CityInfo[] => {
   return response.map((city) => ({
     name: city.LocalizedName,
-    key: city.Key,
+    Key: city.Key,
   }));
 };
 
@@ -117,10 +132,8 @@ export const getSearchLocations = async (
   const url = urls.getSearchUrl(searchQuery);
 
   try {
-    // const response = await axios.get(url);
-    // console.log(response);
-    const response2 = searchResponse;
-    const cities = extractCities(response2);
+    const response = await axios.get(url);
+    const cities = extractCities(response.data);
 
     return cities;
   } catch (error) {

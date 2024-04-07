@@ -10,8 +10,4 @@ export const sx = {
 
 export const sxAutocomplete = {
   minWidth: 220,
-
-  "&.css-6t7czs-MuiPaper-root-MuiAutocomplete-paper": {
-    "background-color": "red",
-  },
 };

@@ -24,7 +24,7 @@ const initialState: InitialState = {
     key: "",
     englishName: "",
     weatherText: "",
-    iconNumber: 0,
+    iconNumber: 1,
     fahrenheit: 0,
     celsius: 0,
   },

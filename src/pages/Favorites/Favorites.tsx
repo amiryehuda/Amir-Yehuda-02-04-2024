@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import FavoriteCard from "./FavoriteCard/FavoriteCard";
 import { ICity } from "../../store/weather/weatherSlice";
-
-const FavoritePageContainer = styled.div`
-  margin-top: 40px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-`;
+import { FavoritePageContainer } from "./styles";
+import { useAppSelector } from "../../store/store";
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<ICity[]>([]);
+  const settingsState = useAppSelector((state) => state.settings);
 
   useEffect(() => {
     const favoritesString = localStorage.getItem("favorites");
@@ -46,12 +39,13 @@ const Favorites: React.FC = () => {
       ) : (
         favorites.map((favorite: ICity) => (
           <FavoriteCard
-            key={favorite.key}
+            keys={favorite.key}
             cityName={favorite.englishName}
             celsius={favorite.celsius}
             fahrenheit={favorite.fahrenheit}
             iconNumber={favorite.iconNumber}
             weatherText={favorite.weatherText}
+            isCelsius={settingsState.isCelsius}
           />
         ))
       )}

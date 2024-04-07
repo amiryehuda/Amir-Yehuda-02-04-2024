@@ -27,7 +27,6 @@ const CelsiusOrFahrenheit = () => {
   ) => {
     if (newAlignment !== null) {
       dispatch(setIsCelsius(newAlignment));
-      console.log(newAlignment);
       localStorage.setItem("isCelsius", newAlignment.toString());
     }
   };

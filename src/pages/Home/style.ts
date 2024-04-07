@@ -13,7 +13,7 @@ export const TextInput = styled.input`
   font-size: 16px;
 `;
 
-export const Square = styled.div<{ isDarkMode: boolean }>`
+export const Square = styled.div`
   width: 96%;
   max-width: 500px;
   margin-top: 20px;
@@ -36,14 +36,13 @@ export const WeatherText = styled.p`
 export const Tabs = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 0.6rem;
   margin-top: 20px;
 `;
 
 export const Tab = styled.div`
-  flex: 1;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
   text-align: center;
 `;

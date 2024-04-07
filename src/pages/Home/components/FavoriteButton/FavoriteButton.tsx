@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import styled from "styled-components";
@@ -8,14 +8,19 @@ import { useLocation } from "react-router-dom";
 
 interface FavoriteButtonProps {
   keyProp: string;
+  isFavorite: boolean;
+  setIsFavorite: (state: boolean) => void;
 }
 
 const Container = styled.div`
   width: 40px;
 `;
 
-const FavoriteButton: React.FC<FavoriteButtonProps> = ({ keyProp }) => {
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+const FavoriteButton: React.FC<FavoriteButtonProps> = ({
+  keyProp,
+  isFavorite,
+  setIsFavorite,
+}) => {
   const cityDetails = useAppSelector((state) => state.weather.currentCity);
   const location = useLocation();
 
@@ -24,7 +29,6 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ keyProp }) => {
     if (favoritesString) {
       const favorites: ICity[] = JSON.parse(favoritesString);
       const found = favorites.some((item) => item.key === keyProp);
-      console.log(found);
 
       setIsFavorite(found);
     }
@@ -41,20 +45,19 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ keyProp }) => {
       const updatedFavorites = favorites.filter((item) => item.key !== keyProp);
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
     } else {
-      // Assuming `Ridax` is an available variable providing data for the favorite item
       const newItem: ICity = {
         key: cityDetails.key,
         englishName: cityDetails.englishName,
         weatherText: cityDetails.weatherText,
-        iconNumber: 12,
-        fahrenheit: 23,
-        celsius: 22,
+        iconNumber: cityDetails.iconNumber,
+        fahrenheit: cityDetails.fahrenheit,
+        celsius: cityDetails.celsius,
       };
       cityDetails.key && favorites.push(newItem);
       localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
-    setIsFavorite((prev) => !prev);
+    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -62,7 +65,6 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ keyProp }) => {
       <div style={{ cursor: "pointer" }} onClick={handleToggleFavorite}>
         {isFavorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
       </div>
-      {/* <p>{isFavorite ? "Remove from favorites" : "Add to favorites"}</p> */}
     </Container>
   );
 };

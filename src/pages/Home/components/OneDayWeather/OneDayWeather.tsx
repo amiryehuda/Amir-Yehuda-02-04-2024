@@ -6,14 +6,12 @@ interface OneDayWeatherProps {
   day: string;
   fahrenheit: number;
   celsius: number;
-  isCelsius: boolean;
 }
 
 const OneDayWeather: React.FC<OneDayWeatherProps> = ({
   day,
   celsius,
   fahrenheit,
-  isCelsius,
 }) => {
   const settingsState = useAppSelector((state) => state.settings);
 

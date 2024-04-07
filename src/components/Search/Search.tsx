@@ -12,7 +12,7 @@ import { debounce } from "../../utils/helpers";
 
 interface SearchItem {
   name: string;
-  key: string;
+  Key: string;
 }
 
 const Search = () => {
@@ -49,17 +49,17 @@ const Search = () => {
   ) => {
     if (option) {
       setValue(option.name);
-      const restCityParams = await getCityWeather(option.key);
+      const restCityParams = await getCityWeather(option.Key);
       if (restCityParams) {
         const { weatherText, iconNumber, celsius, fahrenheit } = restCityParams;
         dispatch(
           setCurrentCity({
-            key: option.key,
+            key: option.Key,
             englishName: option.name,
             weatherText: weatherText,
             iconNumber: iconNumber,
-            fahrenheit: celsius,
-            celsius: fahrenheit,
+            fahrenheit: fahrenheit,
+            celsius: celsius,
           })
         );
       }
@@ -74,7 +74,6 @@ const Search = () => {
       id="asynchronous-demo"
       sx={sxAutocomplete}
       open={options.length !== 0 && open}
-      // open={true}
       onOpen={() => {
         setOpen(true);
       }}
@@ -82,7 +81,7 @@ const Search = () => {
         setOpen(false);
         setOptions([]);
       }}
-      isOptionEqualToValue={(option, value) => option.key === value.key}
+      isOptionEqualToValue={(option, value) => option.Key === value.Key}
       getOptionLabel={(option) => option.name}
       options={options}
       loading={loading}
@@ -91,6 +90,7 @@ const Search = () => {
         <TextField
           {...params}
           placeholder="Search for a location..."
+          id={"text-field"}
           value={value}
           onChange={change}
           sx={sx}

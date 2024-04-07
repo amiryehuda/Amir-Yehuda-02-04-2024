@@ -7,9 +7,10 @@ import {
   getCityWeather,
   getLocationKey,
   getNextFiveDays,
-  getSearchLocations,
+  getUserLatLan,
 } from "../../utils/utils";
 import {
+  ICity,
   OneDayWeatherType,
   setCurrentCity,
   setNextFiveDays,
@@ -18,10 +19,8 @@ import Search from "../../components/Search/Search";
 import FavoriteButton from "./components/FavoriteButton/FavoriteButton";
 import CelsiusOrFahrenheit from "../../components/CelsiusOrFahrenheit/CelsiusOrFahrenheit";
 import { loadDynamicImage } from "../../utils/helpers";
-// import DarkMode from "../../components/DarkModeToggle/DarkMode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { to } from "react-spring";
 
 interface HomeI {
   firstVisitInApp: boolean;
@@ -32,7 +31,7 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
   const settingsState = useAppSelector((state) => state.settings);
   const cityDetails = useAppSelector((state) => state.weather.currentCity);
   const nextFiveDays = useAppSelector((state) => state.weather.nextFiveDays);
-  // const [locationCalled, setLocationCalled] = useState<boolean>(false);
+  const [weatherIcon, setWeatherIcon] = useState(null);
 
   const displayCelsiusOrFahrenheit = () => {
     if (settingsState.isCelsius) {
@@ -42,25 +41,35 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
     }
   };
 
-  const updateOneCityWeather = async (cityName: string) => {
-    const response = await getLocationKey(cityName);
+  const foo = async (LatLan: string) => {
+    const response = await getLocationKey(LatLan);
     if (response) {
-      const { key, englishName } = response;
-      const restCityParams = await getCityWeather(key);
+      const { Key, englishName } = response;
+      const restCityParams = await getCityWeather(Key);
       if (restCityParams) {
         const { weatherText, iconNumber, celsius, fahrenheit } = restCityParams;
         dispatch(
           setCurrentCity({
-            key: key,
+            key: Key,
             englishName: englishName,
             weatherText: weatherText,
             iconNumber: iconNumber,
-            fahrenheit: celsius,
-            celsius: fahrenheit,
+            fahrenheit: fahrenheit,
+            celsius: celsius,
           })
         );
-        setFirstVisitInApp(true);
+        !firstVisitInApp && setFirstVisitInApp(true);
       }
+    }
+  };
+
+  const updateCurrentCityWeather = async (confirmLocation: boolean) => {
+    if (confirmLocation) {
+      const currentLatLan = await getUserLatLan();
+      foo(currentLatLan);
+    } else {
+      const TelAvivLatLan = "32.0853,34.7818";
+      foo(TelAvivLatLan);
     }
   };
 
@@ -69,12 +78,13 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
       const locationResponse = await fetch("https://ipapi.co/json/");
       const locationData = await locationResponse.json();
       const userCity = locationData.city;
+
       const confirmation = window.confirm(
         `We detected your location as ${userCity}. Is this correct?`
       );
 
       if (confirmation) {
-        updateOneCityWeather(userCity);
+        updateCurrentCityWeather(confirmation);
       } else {
         toast.error(
           "You did not confirm your location. Defaulting to Tel Aviv.",
@@ -82,18 +92,13 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
             position: "bottom-left",
           }
         );
-        updateOneCityWeather("Tel Aviv");
+
+        updateCurrentCityWeather(confirmation);
       }
     } catch (error) {
       console.error("Error fetching location:", error);
     }
   };
-
-  useEffect(() => {
-    if (!firstVisitInApp) {
-      fetchDataFirstTime();
-    }
-  }, [dispatch]);
 
   const updateNextFiveDay = async () => {
     const response =
@@ -104,12 +109,14 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
   };
 
   useEffect(() => {
-    updateNextFiveDay();
-  }, [cityDetails.key]);
-
-  const [weatherIcon, setWeatherIcon] = useState(null);
+    if (!firstVisitInApp) {
+      fetchDataFirstTime();
+    }
+  }, []);
 
   useEffect(() => {
+    checkIsFavorite();
+    updateNextFiveDay();
     handleOnDynamicIcon();
   }, [cityDetails.key]);
 
@@ -117,13 +124,24 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
     setWeatherIcon(await loadDynamicImage(cityDetails.iconNumber));
   };
 
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const checkIsFavorite = () => {
+    const favoritesString = localStorage.getItem("favorites");
+    if (favoritesString) {
+      const favorites: ICity[] = JSON.parse(favoritesString);
+      const found = favorites.some((item) => item.key === cityDetails?.key);
+      setIsFavorite(found);
+    }
+  };
+  console.log(nextFiveDays);
+
   return (
     <Container>
       <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
         <Search />
         <CelsiusOrFahrenheit />
       </div>
-      <Square isDarkMode>
+      <Square>
         <UpperPart>
           <div>
             <h2>{cityDetails?.englishName}</h2>
@@ -138,7 +156,12 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
               )}
             </div>
           </div>
-          <FavoriteButton keyProp={cityDetails.key} />
+
+          <FavoriteButton
+            keyProp={cityDetails.key}
+            isFavorite={isFavorite}
+            setIsFavorite={setIsFavorite}
+          />
         </UpperPart>
         <WeatherText>{cityDetails.weatherText}</WeatherText>
         <Tabs>
@@ -147,7 +170,6 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
               celsius={parseInt(oneDay.celsius)}
               fahrenheit={parseInt(oneDay.fahrenheit)}
               day={oneDay.day}
-              isCelsius={true}
               key={oneDay.day}
             />
           ))}

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
-import { Header } from "./styles/global-style";
 import Favorites from "./pages/Favorites/Favorites";
 import NavBar from "./components/Tabs/Tabs";
 import DarkModeSwitcheButton from "./components/DarkModeSwitcheButton/DarkModeSwitcheButton";
+import { Header } from "./styles/global-style";
 import "./App.css";
 
 const App: React.FC = () => {
