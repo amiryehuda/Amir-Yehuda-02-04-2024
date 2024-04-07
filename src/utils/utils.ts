@@ -33,7 +33,6 @@ export const getLocationKey = async (
   cityName: string
 ): Promise<{ Key: string; englishName: string } | null> => {
   const url = urls.getLocationKeyUrl(cityName);
-  // const url = urls.getLocationKeyUrl("Tel Aviv");
 
   try {
     const response = await axios.get(url);
@@ -41,7 +40,6 @@ export const getLocationKey = async (
       Key: response.data[0].Key,
       englishName: response.data[0].EnglishName,
     };
-    // return { key: "215854", englishName: "TeL Aviv" };
   } catch (error) {
     console.log("Error getLocationKey: ", error);
     return null;

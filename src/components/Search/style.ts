@@ -1,3 +1,6 @@
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/system";
+
 export const sx = {
   "& .MuiAutocomplete-endAdornment": {
     display: "none",
@@ -10,4 +13,11 @@ export const sx = {
 
 export const sxAutocomplete = {
   minWidth: 220,
+  ".MuiAutocomplete-option": {
+    backgroundColor: "#000",
+  },
 };
+
+export const CustomPaper = styled(Paper)({
+  backgroundColor: "red",
+});

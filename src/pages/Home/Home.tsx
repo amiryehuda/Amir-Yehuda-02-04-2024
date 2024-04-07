@@ -41,7 +41,7 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
     }
   };
 
-  const foo = async (LatLan: string) => {
+  const GetLocationByLatitudeAndLongitude = async (LatLan: string) => {
     const response = await getLocationKey(LatLan);
     if (response) {
       const { Key, englishName } = response;
@@ -66,10 +66,10 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
   const updateCurrentCityWeather = async (confirmLocation: boolean) => {
     if (confirmLocation) {
       const currentLatLan = await getUserLatLan();
-      foo(currentLatLan);
+      GetLocationByLatitudeAndLongitude(currentLatLan);
     } else {
       const TelAvivLatLan = "32.0853,34.7818";
-      foo(TelAvivLatLan);
+      GetLocationByLatitudeAndLongitude(TelAvivLatLan);
     }
   };
 

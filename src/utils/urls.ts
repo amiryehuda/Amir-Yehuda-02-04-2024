@@ -1,7 +1,4 @@
-// const apiKey: string = `?apikey=${process.env.REACT_APP_API_KEY}`;
-// const apiKey: string = `?apikey=${process.env.REACT_APP_API_KEY2}`;
-const apiKey: string = `?apikey=Kvi2wO4vAXpyeKCYNVJxoyGBtGGAD8bl`;
-// const apiKey: string = `?apikey=H5CLIcQpQY99gtsKW4InLVgXHmBQxJfE`;
+const apiKey: string = `?apikey=0LX8einXw7MoXKnFheEUe5OWOkWAz04r`;
 
 const baseSearchLocations =
   "https://dataservice.accuweather.com/locations/v1/cities/autocomplete";

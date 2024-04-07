@@ -6,7 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useAppDispatch } from "../../store/store";
 import { setCurrentCity } from "../../store/weather/weatherSlice";
 import { getCityWeather, getSearchLocations } from "../../utils/utils";
-import { sxAutocomplete, sx } from "./style";
+import { sxAutocomplete, sx, CustomPaper } from "./style";
 import "react-toastify/dist/ReactToastify.css";
 import { debounce } from "../../utils/helpers";
 
@@ -86,6 +86,7 @@ const Search = () => {
       options={options}
       loading={loading}
       onChange={onOptionChange}
+      PaperComponent={CustomPaper}
       renderInput={(params) => (
         <TextField
           {...params}
