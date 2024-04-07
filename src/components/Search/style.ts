@@ -19,5 +19,5 @@ export const sxAutocomplete = {
 };
 
 export const CustomPaper = styled(Paper)({
-  backgroundColor: "red",
+  backgroundColor: "#8796a5",
 });
