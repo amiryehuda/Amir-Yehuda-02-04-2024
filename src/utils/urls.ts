@@ -3,11 +3,11 @@
 const apiKey: string = `?apikey=H5CLIcQpQY99gtsKW4InLVgXHmBQxJfE`;
 
 const baseSearchLocations =
-  "http://dataservice.accuweather.com/locations/v1/cities/autocomplete";
-const baseFiveDaysWeatherUrl = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/`;
+  "https://dataservice.accuweather.com/locations/v1/cities/autocomplete";
+const baseFiveDaysWeatherUrl = `https://dataservice.accuweather.com/forecasts/v1/daily/5day/`;
 const basePathCurrentWeather =
-  "http://dataservice.accuweather.com/currentconditions/v1/";
-const baseGetLocationKey = `http://dataservice.accuweather.com/locations/v1/cities/search`;
+  "https://dataservice.accuweather.com/currentconditions/v1/";
+const baseGetLocationKey = `https://dataservice.accuweather.com/locations/v1/cities/search`;
 
 const getSearchUrl = (searchQuery: string) => {
   return `${baseSearchLocations}${apiKey}&q=${searchQuery}`;
