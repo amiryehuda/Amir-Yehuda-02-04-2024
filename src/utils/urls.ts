@@ -1,4 +1,4 @@
-const apiKey: string = `?apikey=Kvi2wO4vAXpyeKCYNVJxoyGBtGGAD8bl`;
+const apiKey: string = `?apikey=H5CLIcQpQY99gtsKW4InLVgXHmBQxJfE`;
 
 const baseSearchLocations =
   "https://dataservice.accuweather.com/locations/v1/cities/autocomplete";
