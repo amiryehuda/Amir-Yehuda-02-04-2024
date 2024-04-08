@@ -109,15 +109,15 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
   };
 
   useEffect(() => {
-    if (!firstVisitInApp) {
-      fetchDataFirstTime();
-    }
+    // if (!firstVisitInApp) {
+    //   fetchDataFirstTime();
+    // }
   }, []);
 
   useEffect(() => {
-    checkIsFavorite();
-    updateNextFiveDay();
-    handleOnDynamicIcon();
+    // checkIsFavorite();
+    // updateNextFiveDay();
+    // handleOnDynamicIcon();
   }, [cityDetails.key]);
 
   const handleOnDynamicIcon = async () => {
