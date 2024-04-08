@@ -87,7 +87,7 @@ const Home: React.FC<HomeI> = ({ firstVisitInApp, setFirstVisitInApp }) => {
         updateCurrentCityWeather(confirmation);
       } else {
         toast.error(
-          "You did not confirm your location. Defaulting to Tel-Aviv.",
+          "You did not confirm your location. Defaulting to Tel Aviv.",
           {
             position: "bottom-left",
           }
