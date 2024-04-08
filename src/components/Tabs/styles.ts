@@ -1,11 +1,11 @@
 export const sxTabs = {
-  ".css-1r7avug-MuiButtonBase-root-MuiTab-root.Mui-selected ": {
+  "& .Mui-selected ": {
     color: "#8796A5",
   },
-  " .MuiTab-textColorPrimary ": {
+  "& .MuiTab-textColorPrimary ": {
     color: "#8796A5",
   },
-  ".css-3sx0hq-MuiTabs-indicator ": {
+  "& .MuiTabs-indicator ": {
     backgroundColor: "#003892",
   },
 };
