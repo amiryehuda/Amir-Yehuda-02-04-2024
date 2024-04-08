@@ -10,10 +10,6 @@ export const sx = {
   "& .MuiAutocomplete-root:hover .MuiInputBase-input": {
     border: "1px solid #8796A5",
   },
-  "& .css-1jgdtkb-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
-    {
-      border: "1px solid #8796A5",
-    },
   "& .MuiAutocomplete-endAdornment": {
     display: "none",
   },
@@ -25,7 +21,7 @@ export const sx = {
   "& .MuiOutlinedInput-notchedOutline": {
     border: "1px solid #8796A5",
   },
-  "& .MuiOutlinedInput-notchedOutline:hover": {
+  "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
     border: "1px solid #8796A5",
   },
 };
